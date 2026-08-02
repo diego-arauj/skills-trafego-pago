@@ -1,0 +1,54 @@
+# ============================================================================
+# Cadastro de contas
+# ============================================================================
+#
+# O Claude lê este arquivo para traduzir nome de cliente em IDs. Com ele
+# preenchido, você fala "puxa os insights da Padaria X" em vez de decorar
+# act_123456789.
+#
+# Não precisa preencher na mão: peça ao Claude "cadastra minhas contas" que
+# ele roda `read.py accounts`, lista o que o seu token enxerga e preenche
+# aqui com as suas respostas.
+#
+# Campos:
+#   slug                — apelido curto, sem espaço, minúsculo. É o que você digita.
+#   nome                — nome de exibição
+#   conta_anuncio       — act_XXXXXXXXX (obrigatório)
+#   pagina_facebook     — page_id, necessário para criar anúncios
+#   instagram_id        — instagram_user_id, obrigatório para publicar no Instagram
+#   instagram_username  — só para conferência humana
+#   pixel               — pixel/dataset id, para tracking_specs e promoted_object
+#   moeda               — BRL, USD...
+#   token               — opcional, sobrescreve o META_ADS_TOKEN só deste cliente
+#   notas               — qualquer observação que o Claude deva saber antes de mexer
+#
+# ATENÇÃO: se este arquivo for versionado, ele leva os IDs dos seus clientes
+# junto. Para manter privado, renomeie sua cópia para contas.local.yaml
+# (já está no .gitignore) e diga ao Claude para usar esse nome.
+# ============================================================================
+
+clientes:
+
+  # -- Modelo: copie o bloco abaixo, descomente e edite --
+  #
+  # meu-cliente:
+  #   nome: "Nome do Cliente"
+  #   conta_anuncio: "act_XXXXXXXXX"
+  #   pagina_facebook: "XXXXXXXXX"
+  #   instagram_id: "XXXXXXXXX"
+  #   instagram_username: "@usuario"
+  #   pixel: "XXXXXXXXX"
+  #   moeda: "BRL"
+  #   notas: "ex.: conta roda CTWA, conjunto novo só pela interface"
+  #
+  # Conta com mais de uma conta de anúncio:
+  #
+  # outro-cliente:
+  #   nome: "Outro Cliente"
+  #   conta_anuncio: "act_XXXXXXXXX"
+  #   moeda: "BRL"
+  #   contas_secundarias:
+  #     - act_YYYYYYYYY   # descrição do que é essa conta
+  #     - act_ZZZZZZZZZ
+
+  # -- Suas contas abaixo --

@@ -1,0 +1,22 @@
+# Credenciais — NUNCA versionar
+.env
+*.env
+!.env.example
+
+# Cadastro de contas preenchido (contém IDs de clientes)
+contas.local.yaml
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs e saídas
+*.log
+out/
