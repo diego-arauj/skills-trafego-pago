@@ -26,19 +26,29 @@ Você conversa em português, ele opera o gerenciador:
 Você precisa de: Python 3, Claude Code, e acesso de administrador às contas que vai operar.
 
 ```bash
-# 1. Clonar em qualquer lugar
 git clone <url-deste-repo> ~/skills-trafego-pago
+cd ~/skills-trafego-pago
+bash instalar.sh
+```
 
-# 2. Instalar as skills (link simbólico: atualizar o repo atualiza as skills)
+O `instalar.sh` cria os links em `~/.claude/skills/`, instala os SDKs e prepara os `.env`. Como ele
+usa link simbólico, atualizar o repo (`git pull`) atualiza as skills.
+
+Se preferir na mão:
+
+```bash
 mkdir -p ~/.claude/skills
 ln -s ~/skills-trafego-pago/meta-ads   ~/.claude/skills/meta-ads
 ln -s ~/skills-trafego-pago/google-ads ~/.claude/skills/google-ads
-
-# 3. SDKs
+ln -s ~/skills-trafego-pago/kb         ~/.claude/skills/kb
 pip3 install facebook-business google-ads google-auth-oauthlib protobuf
 ```
 
-Depois abra o Claude Code na pasta e peça:
+**O link do `kb` não é opcional.** As duas skills consultam a base de conhecimento em `../kb/`; sem
+ele, o Claude opera as contas mas perde a parte de estratégia. `kb` não é uma skill — o Claude Code
+ignora pasta sem `SKILL.md`.
+
+Depois abra o Claude Code e peça:
 
 > "roda o setup da skill de meta ads"
 
