@@ -1,6 +1,8 @@
 # Credenciais — NUNCA versionar
 .env
 *.env
+.env.*
+google-ads.yaml
 !.env.example
 
 # Cadastro de contas preenchido (contém IDs de clientes)

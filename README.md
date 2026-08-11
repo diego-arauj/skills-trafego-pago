@@ -1,112 +1,121 @@
-# Meta Ads Skill para Claude Code
+# Skills de Tráfego Pago para Claude Code
 
-Skill que dá ao Claude Code controle das suas contas de Meta Ads (Facebook e Instagram) pela API
-oficial da Meta, com scripts Python que rodam na sua máquina.
+Duas skills que dão ao Claude Code controle das suas contas de anúncio pelas APIs oficiais, com
+scripts Python que rodam na sua máquina, mais a base de conhecimento que ensina o Claude a **operar
+como gestor**, não só a chamar endpoint.
 
 Você conversa em português, ele opera o gerenciador:
 
 - "lista as campanhas ativas do cliente X"
 - "quanto gastei nos últimos 7 dias, quebrado por campanha"
 - "cria uma campanha de leads com R$ 50 por dia"
-- "duplica essa campanha e troca as UTMs"
+- "quais termos de busca estão queimando verba sem converter?"
+- "por que essa PMax não está gastando?"
 - "esse pixel está saudável?"
 
-**54 operações** em 8 scripts: leitura, métricas, segmentação, criação, edição, exclusão,
-duplicação e diagnóstico de pixel.
-
-Mais do que os scripts, o que vem junto é o **conhecimento operacional**: um método de otimização
-e um arquivo de erros e acertos que evita repetir enganos que já custaram campanha rodando errada.
+| Skill | O que faz |
+|---|---|
+| [meta-ads/](meta-ads/) | Facebook e Instagram: 54 operações — leitura, métricas, segmentação, criação, edição, exclusão, duplicação e diagnóstico de pixel |
+| [google-ads/](google-ads/) | Google: leitura e insights por GAQL, campanhas Search/PMax/Demand Gen, keywords, RSAs, extensões, negativas, Keyword Planner |
+| [kb/](kb/) | a inteligência: método de otimização, métricas, criativo, e playbooks por modelo de negócio (e-commerce, negócio local, infoproduto) |
 
 ---
 
 ## Instalação
 
-Você precisa de: Python 3, Claude Code, e uma conta de anúncios da Meta com acesso de
-administrador.
+Você precisa de: Python 3, Claude Code, e acesso de administrador às contas que vai operar.
 
 ```bash
-# 1. Clonar dentro das skills do Claude Code
-git clone <url-deste-repo> ~/.claude/skills/meta-ads
-cd ~/.claude/skills/meta-ads
+# 1. Clonar em qualquer lugar
+git clone <url-deste-repo> ~/skills-trafego-pago
 
-# 2. Instalar o SDK da Meta
-pip3 install facebook-business
+# 2. Instalar as skills (link simbólico: atualizar o repo atualiza as skills)
+mkdir -p ~/.claude/skills
+ln -s ~/skills-trafego-pago/meta-ads   ~/.claude/skills/meta-ads
+ln -s ~/skills-trafego-pago/google-ads ~/.claude/skills/google-ads
 
-# 3. Criar o arquivo de credenciais
-cp .env.example .env
-
-# 4. Abrir o Claude Code na pasta e pedir:
-#    "roda o setup da skill de meta ads"
+# 3. SDKs
+pip3 install facebook-business google-ads google-auth-oauthlib protobuf
 ```
 
-O Claude conduz o resto: cria o app na Meta, gera o token, resolve o acesso às contas e cadastra
-seus clientes. Se preferir fazer na mão, o passo a passo completo com as telas da Meta está em
-[references/setup-meta-app.md](references/setup-meta-app.md).
+Depois abra o Claude Code na pasta e peça:
 
-Para conferir se ficou tudo certo:
+> "roda o setup da skill de meta ads"
+
+ou
+
+> "me ajuda a configurar a skill de google ads"
+
+Ele conduz o resto: cria o app, gera o token, resolve o acesso às contas e cadastra seus clientes.
+Se preferir fazer na mão, o passo a passo com as telas está em cada skill:
+
+- Meta: [meta-ads/references/setup-meta-app.md](meta-ads/references/setup-meta-app.md)
+- Google: [google-ads/references/setup-google-ads-api.md](google-ads/references/setup-google-ads-api.md)
+
+**Comece pela Meta.** O setup dela leva 20 minutos; o do Google tem uma etapa de aprovação do
+developer token que pode levar um dia.
+
+### Conferir se ficou de pé
 
 ```bash
-python3 scripts/setup.py
-python3 scripts/read.py accounts
+python3 ~/.claude/skills/meta-ads/scripts/read.py accounts
+python3 ~/.claude/skills/google-ads/scripts/read.py accounts
 ```
 
-Se `accounts` listar suas contas, está pronto.
+Se os dois listarem suas contas, está pronto.
 
 ---
 
-## O que tem aqui
+## Por onde começar a ler
 
-| Arquivo | Para que serve |
+| Arquivo | Para quê |
 |---|---|
-| [INSTRUCOES-CLAUDE.md](INSTRUCOES-CLAUDE.md) | **Comece por aqui.** O briefing do Claude: como conduzir você, o que ler, o que nunca fazer |
-| [SKILL.md](SKILL.md) | a skill: referência de todos os comandos e as regras de segurança |
-| [aprendizados.md](aprendizados.md) | erros e acertos reais ao subir campanhas pela API, com os códigos de erro e o que eles significam de verdade |
-| [references/setup-meta-app.md](references/setup-meta-app.md) | app, token, acesso às contas dos clientes, troubleshooting |
-| [references/metodo-operacional.md](references/metodo-operacional.md) | o método: rotina de otimização, os seis parafusos, métricas, escala |
-| [references/padroes-campanha.md](references/padroes-campanha.md) | configuração validada por tipo de campanha |
-| [references/api-reference.md](references/api-reference.md) | referência de campos e endpoints |
-| [contas.yaml](contas.yaml) | cadastro dos seus clientes: nome → IDs |
-| `scripts/` | os scripts Python que falam com a API |
+| [INSTRUCOES-CLAUDE.md](INSTRUCOES-CLAUDE.md) | **o briefing do Claude.** Como ele deve te conduzir, o que ler antes de agir, o que nunca fazer |
+| [meta-ads/README.md](meta-ads/README.md) e [google-ads/README.md](google-ads/README.md) | o que cada skill faz |
+| `*/aprendizados.md` | os erros reais. Cada entrada ali custou uma campanha rodando errada para alguém |
+| [kb/README.md](kb/README.md) | o que tem em cada base de inteligência |
 
 ---
 
 ## Segurança
 
-- O token fica só no `.env`, que está no `.gitignore`. Nada é enviado para lugar nenhum além da
-  própria Meta.
+- Tokens ficam só nos arquivos `.env`, cobertos pelo `.gitignore`. Nada é enviado para lugar nenhum
+  além das APIs da própria Meta e do próprio Google.
 - **Toda criação nasce pausada.** Ativar exige a sua confirmação.
 - Orçamento, exclusão e ativação sempre pedem confirmação antes.
-- Se você for versionar o `contas.yaml` preenchido, lembre que ele leva os IDs dos seus clientes.
-  Para manter privado, renomeie sua cópia para `contas.local.yaml`, que já está no `.gitignore`.
+- Se você preencher os `contas.yaml` com os IDs dos seus clientes e for versionar o repo, renomeie
+  sua cópia para `contas.local.yaml` — já está no `.gitignore`.
 
 ---
 
 ## Disclaimer: use com responsabilidade
 
-Esta skill foi construída com Claude Code a partir da documentação oficial do
-[facebook-business SDK](https://github.com/facebook/facebook-python-business-sdk) e da
-[Meta Marketing API](https://developers.facebook.com/docs/marketing-api/), e refinada em operação
-real. Ainda assim:
+Estas skills foram construídas com Claude Code sobre a documentação oficial da
+[Meta Marketing API](https://developers.facebook.com/docs/marketing-api/) e da
+[Google Ads API](https://developers.google.com/google-ads/api/docs/start), e refinadas em operação
+real de agência. Ainda assim:
 
-- **Use por sua conta e risco.** Não há garantia de que o uso não resulte em restrição ou
-  bloqueio na sua conta de anúncios. A Meta tem políticas próprias sobre automação e muda as
-  regras quando quer.
-- **Leia as políticas da Meta**, especialmente os [Termos de Serviço de anúncios](https://www.facebook.com/policies/ads/)
-  e as [regras de rate limiting](https://developers.facebook.com/docs/marketing-api/overview/rate-limiting/).
-  A skill inclui espera entre operações de escrita, o que ajuda mas não garante nada.
-- **Revise o código.** A skill tem acesso de leitura e escrita às suas contas. Os scripts estão
+- **Use por sua conta e risco.** Não há garantia de que o uso não resulte em restrição ou bloqueio
+  nas suas contas de anúncio. As duas plataformas têm políticas próprias sobre automação e mudam as
+  regras quando querem.
+- **Leia as políticas.** [Termos de anúncios da Meta](https://www.facebook.com/policies/ads/),
+  [rate limiting da Meta](https://developers.facebook.com/docs/marketing-api/overview/rate-limiting/)
+  e [cotas do Google](https://developers.google.com/google-ads/api/docs/best-practices/quotas). As
+  skills esperam entre operações de escrita, o que ajuda, mas não garante nada.
+- **Revise o código.** As skills têm acesso de leitura e escrita às suas contas. Os scripts estão
   aqui justamente para serem lidos antes de usar.
-- **Criação nasce pausada, mas edição e exclusão agem na hora.** Tenha cuidado.
-- **Sem garantia de funcionamento.** O SDK e a API mudam com frequência. O que funciona hoje pode
+- **Criação nasce pausada, mas edição e exclusão agem na hora.**
+- **Sem garantia de funcionamento.** SDK e API mudam com frequência. O que funciona hoje pode
   quebrar amanhã, e quase sempre é mudança na API, não no seu setup.
 
-Resumindo: é uma ferramenta poderosa, e a responsabilidade pelo que acontece na sua conta é sua.
-Não faça por aqui nada que você não faria na mão no Ads Manager.
+Resumindo: é uma ferramenta poderosa, e a responsabilidade pelo que acontece na conta é sua. Não
+faça por aqui nada que você não faria na mão no gerenciador.
 
 ---
 
 ## Créditos
 
-O método de otimização em `references/metodo-operacional.md` é a síntese da prática de quem
-construiu esta skill, apoiada no método ensinado pelo Pedro Sobral no Subido de Tráfego. Não é o
-material do curso: se o assunto interessa, vale fazer o curso na fonte.
+O método operacional em `meta-ads/references/metodo-operacional.md` é a síntese da prática de quem
+construiu estas skills. As bases em [kb/](kb/) são anotações destiladas do **Subido de Tráfego** e da
+**Especialização de Tráfego**, do Pedro Sobral, e estão aqui como material de estudo entre alunos dos
+cursos. Não substituem o curso: se o assunto interessa, o caminho é a fonte.

@@ -14,7 +14,8 @@ Gestão de Meta Ads pela API oficial. Os scripts em `scripts/` executam; os arqu
 |---|---|
 | Primeira vez, ou token não funciona | `references/setup-meta-app.md` |
 | Antes de **criar** qualquer objeto | `aprendizados.md` e `references/padroes-campanha.md` |
-| Antes de recomendar estratégia, estrutura, verba ou otimização | `references/metodo-operacional.md` |
+| Antes de recomendar estratégia, estrutura, verba ou otimização | `references/metodo-operacional.md` e `../kb/meta-ads-inteligencia.md` |
+| Cliente é e-commerce, negócio local ou infoproduto | o playbook do modelo em `../kb/` |
 | Dúvida de campo ou endpoint da API | `references/api-reference.md` |
 
 Não pule o `aprendizados.md`. Ele existe porque cada entrada ali já custou dinheiro real.

@@ -1,0 +1,21 @@
+# Cadastro de contas de Google Ads
+#
+# Serve para você falar "puxa as campanhas da Padaria X" em vez de decorar customer_id.
+# O Claude lê este arquivo antes de qualquer operação para resolver nome -> ID.
+#
+# customer_id: sempre SEM hifens (123-456-7890 vira 1234567890).
+# env_profile:  só se esse cliente exigir credenciais próprias, num .env.<perfil> separado.
+#               Sem isso, o Claude usa o .env padrão.
+
+clientes:
+  - nome: "Cliente Exemplo"
+    customer_id: "1234567890"
+    notas: "Search + PMax. Conversão principal: Lead."
+
+  # - nome: "Cliente com MCC próprio"
+  #   customer_id: "9876543210"
+  #   env_profile: "clientex"     # usa .env.clientex
+  #   notas: "Acesso de analista via MCC do cliente."
+
+# Dica: se você não quiser versionar seus clientes, renomeie sua cópia preenchida para
+# contas.local.yaml — o .gitignore já cobre esse nome.
